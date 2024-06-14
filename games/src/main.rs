@@ -1,1 +1,1 @@
-use hangman::main;
+use games::main;
