@@ -10,7 +10,8 @@ pub fn main() {
         
         println!("What do you want to play?");
         println!("1. Hangman");
-        println!("2. Quit (You can always enter Q to quit during the game.)");
+        println!("2. Prime Guesser");
+        println!("3. Quit (You can always enter Q to quit during the game.)");
 
         let mut choice = String::new();
 
@@ -24,7 +25,10 @@ pub fn main() {
             "1" => {
                 modules::hangman::run_hangman();
             },
-            "2" | "q" => {
+            "2" => {
+                modules::prime_guesser::run_prime_guesser();
+            },
+            "3" | "q" => {
                 println!("Thanks for playing!");
                 break;
             },
