@@ -1,3 +1,5 @@
+use std::env;
+
 pub fn greet() {
-    println!("Hello, User!")
+    println!("Hello, {}!", env::var("USERNAME").unwrap_or(String::from("User")));
 }
