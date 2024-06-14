@@ -68,6 +68,16 @@ pub fn run_hangman() {
                 continue;
             }
 
+            if guess.chars().next().unwrap().to_lowercase().next() == Some('q') {
+                println!("Thanks for playing!");
+                return;
+            }
+
+            if guess.chars().next().unwrap().is_alphabetic() == false {
+                current_error = "Please enter a valid character".to_string();
+                continue;
+            }
+
             if guessed.contains(&guess) {
                 current_error = "You already guessed that character".to_string();
                 continue;

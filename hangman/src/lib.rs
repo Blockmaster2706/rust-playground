@@ -12,7 +12,7 @@ pub fn main() {
 
         println!("1. Hangman");
 
-        println!("2. Quit");
+        println!("2. Quit (You can always enter Q to quit during the game.)");
 
         let mut choice = String::new();
 
@@ -26,7 +26,7 @@ pub fn main() {
             "1" => {
                 modules::hangman::run_hangman();
             },
-            "2" => {
+            "2" | "q" => {
                 println!("Thanks for playing!");
                 break;
             },
