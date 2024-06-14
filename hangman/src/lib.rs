@@ -9,9 +9,7 @@ pub fn main() {
         modules::greeting::greet();
         
         println!("What do you want to play?");
-
         println!("1. Hangman");
-
         println!("2. Quit (You can always enter Q to quit during the game.)");
 
         let mut choice = String::new();
