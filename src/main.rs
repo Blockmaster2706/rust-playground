@@ -1,1 +1,5 @@
-use rust_playground::main;
+use rust_playground::main_function;
+
+fn main() {
+    main_function();
+}
