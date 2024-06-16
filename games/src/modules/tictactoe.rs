@@ -19,6 +19,11 @@ pub fn run_tictactoe() {
                 .read_line(&mut choice)
                 .expect("Failed to read line");
 
+            if choice.trim() == "q" {
+                println!("Thanks for playing!");
+                return;
+            }
+
             let choice: usize = match choice.trim().parse() {
                 Ok(num) => num,
                 Err(_) => {
