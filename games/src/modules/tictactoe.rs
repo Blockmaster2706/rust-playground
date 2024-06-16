@@ -1,8 +1,7 @@
-pub mod states;
+mod states;
 
 use std::io;
-
-use rand::prelude::SliceRandom;
+use rand::seq::SliceRandom;
 
 pub fn run_tictactoe() {
     loop {
@@ -65,13 +64,12 @@ pub fn run_tictactoe() {
                 }
             }
 
-            let mut available_choices = vec![];
-
-            for (i, cell) in board.iter().enumerate() {
-                if cell != "X" && cell != "O" {
-                    available_choices.push(i);
-                }
-            }
+            let available_choices: Vec<usize> = board
+                .iter()
+                .enumerate()
+                .filter(|(_, cell)| **cell != "X" && **cell != "O")
+                .map(|(i, _)| i)
+                .collect();
 
             if available_choices.is_empty() {
                 states::render_state(&board);
@@ -94,8 +92,8 @@ pub fn run_tictactoe() {
                 }
             }
 
-            let computer_choice = available_choices.choose_mut(&mut rand::thread_rng()).unwrap();
-            board[*computer_choice] = "O".to_string();
+            let computer_choice = choose_computer_move(&board);
+            board[computer_choice] = "O".to_string();
 
             if check_win(&board, "O") {
                 states::render_state(&board);
@@ -121,22 +119,56 @@ pub fn run_tictactoe() {
     }
 }
 
-fn check_win(board: &[String; 9], player: &str) -> bool {
-    let winning_combinations = vec![
-        vec![0, 1, 2],
-        vec![3, 4, 5],
-        vec![6, 7, 8],
-        vec![0, 3, 6],
-        vec![1, 4, 7],
-        vec![2, 5, 8],
-        vec![0, 4, 8],
-        vec![2, 4, 6]
-    ];
+fn choose_computer_move(board: &[String; 9]) -> usize {
+    // First, check if there is a winning move for the computer
+    for i in 0..9 {
+        if board[i] != "X" && board[i] != "O" {
+            let mut new_board = board.clone();
+            new_board[i] = "O".to_string();
+            if check_win(&new_board, "O") {
+                return i;
+            }
+        }
+    }
 
-    for combination in winning_combinations {
-        if combination.iter().all(|&i| board[i] == player) {
+    // Then, check if there is a winning move for the player and block it
+    for i in 0..9 {
+        if board[i] != "X" && board[i] != "O" {
+            let mut new_board = board.clone();
+            new_board[i] = "X".to_string();
+            if check_win(&new_board, "X") {
+                return i;
+            }
+        }
+    }
+
+    // If no winning moves are available, choose a random available move
+    let available_choices: Vec<usize> = board
+        .iter()
+        .enumerate()
+        .filter(|(_, cell)| **cell != "X" && **cell != "O")
+        .map(|(i, _)| i)
+        .collect();
+
+    *available_choices.choose(&mut rand::thread_rng()).unwrap()
+}
+
+fn check_win(board: &[String; 9], player: &str) -> bool {
+    for i in 0..3 {
+        if board[i] == player && board[i+3] == player && board[i+6] == player {
             return true;
         }
+        if board[i*3] == player && board[i*3+1] == player && board[i*3+2] == player {
+            return true;
+        }
+    }
+
+    if board[0] == player && board[4] == player && board[8] == player {
+        return true;
+    }
+
+    if board[2] == player && board[4] == player && board[6] == player {
+        return true;
     }
 
     false
